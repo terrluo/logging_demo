@@ -1,6 +1,6 @@
 # logging_demo
 
-### 1.配置 LOGGING
+#### 1.配置 LOGGING
 ```python
 import os
 
@@ -11,7 +11,13 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
+            # {lineno:3} 里的 :3 表示至少显示3格，{levelname:7} 同理
+            # 详见 https://docs.python.org/3/library/logging.html#logrecord-attributes
             'format': '{asctime} {module}.{funcName} {lineno:3} {levelname:7} => {message}',
+            # 这里 style 选择 { ，是指 {asctime} 这种形式。
+            # 如果选择 % ，则是 %(asctime)s 这种形式。
+            # 还有一种选择，是 $ ，是 $asctime 或 ${asctime} 这种形式。
+            # 详见 https://docs.python.org/3/howto/logging-cookbook.html#use-of-alternative-formatting-styles。
             'style': '{',
             # 可以配置时间格式
             # 'datefmt': '%Y-%m-%d %H:%M:%S',
@@ -21,22 +27,12 @@ LOGGING = {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
     },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'filters': ['require_debug_true'],
             'formatter': 'verbose',
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['require_debug_false'],
-            'email_backend': 'django.core.mail.backends.smtp.EmailBackend',
-            'include_html': True,
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
@@ -45,6 +41,59 @@ LOGGING = {
             'maxBytes': 4194304,  # 4 MB
             'backupCount': 10,
             'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        # 处理我们自己写的 log
+        '': {
+            'handlers': ['console', 'file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+        },
+        # 处理 django 自己打印的 log
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            # 设置 False 时不会再向上广播，也就是这条 log 不会再发送给 'django' 的上级 '' 处理，
+            # 使得 django 自己的 log 都在 'django' 处理，而我们自己写的 log 就会在 '' 处理
+            'propagate': False,
+        },
+    },
+}
+```
+
+####  2.配置 LOGGING 发送邮件
+```python
+import os
+
+# 配置邮件
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.qq.com'  # 如果是 163 改成 smtp.163.com
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'your_account@qq.com'  # 帐号
+EMAIL_HOST_PASSWORD = "your_password"  # 授权码（****）
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+SERVER_EMAIL = EMAIL_HOST_USER  # 邮箱账号
+
+ADMINS = (
+    ('bugs', EMAIL_HOST_USER),
+)
+
+# 配置 LOGGING
+LOGGING = {
+    # 以下省略不重要配置
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'email_backend': 'django.core.mail.backends.smtp.EmailBackend',
+            'include_html': True,
         },
     },
     'loggers': {
@@ -61,7 +110,7 @@ LOGGING = {
 }
 ```
 
-### 2.使用 LOGGING
+####  3.使用 LOGGING
 ```python
 import logging
 
