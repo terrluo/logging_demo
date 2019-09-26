@@ -11,7 +11,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            # {lineno:3} 里的 :3 表示至少显示3格，{levelname:7} 同理
+            # {lineno:3} 里的 :3 表示至少显示3格，{levelname:7} 同理 
             # 详见 https://docs.python.org/3/library/logging.html#logrecord-attributes
             'format': '{asctime} {module}.{funcName} {lineno:3} {levelname:7} => {message}',
             # 这里 style 选择 { ，是指 {asctime} 这种形式。
