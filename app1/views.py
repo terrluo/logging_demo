@@ -18,7 +18,7 @@ class App1ListView(ListView):
 
         try:
             _ = 1 / 0
-        except Exception as e:
+        except ZeroDivisionError as e:
             # 可以显示报错信息
             logger.error('(%s)开始执行 App1ListView get 方法', 'ERROR', exc_info=e)
             logger.critical('(%s)开始执行 App1ListView get 方法', 'CRITICAL')
