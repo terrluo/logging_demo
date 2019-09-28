@@ -169,6 +169,8 @@ LOGGING = {
             'filename': os.path.join(LOGGING_URL, 'django.log'),
             'maxBytes': 4194304,  # 4 MB
             'backupCount': 10,
+            # 设置 log 编码
+            'encoding': 'utf-8',
             'level': 'DEBUG',
         },
     },
