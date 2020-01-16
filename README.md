@@ -22,6 +22,9 @@ LOGGING = {
             # 可以配置时间格式
             # 'datefmt': '%Y-%m-%d %H:%M:%S',
         },
+        'standard': {
+            'format': '[%(asctime)s] [%(levelname)s] %(message)s',
+        }
     },
     'filters': {
         'require_debug_true': {
@@ -32,7 +35,7 @@ LOGGING = {
         'console': {
             'class': 'logging.StreamHandler',
             'filters': ['require_debug_true'],
-            'formatter': 'verbose',
+            'formatter': 'standard',
         },
         'file': {
             'class': 'logging.handlers.RotatingFileHandler',
