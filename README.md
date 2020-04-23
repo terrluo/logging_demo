@@ -1,4 +1,5 @@
 # logging_demo
+![actions_img]
 
 #### 1.配置 LOGGING
 ```python
@@ -145,3 +146,5 @@ class App1ListView(ListView):
 
         return super(App1ListView, self).get(request, *args, **kwargs)
 ```
+
+[actions_img]:https://github.com/Terrenceluo/logging_demo/workflows/Django%20CI/badge.svg
