@@ -147,4 +147,4 @@ class App1ListView(ListView):
         return super(App1ListView, self).get(request, *args, **kwargs)
 ```
 
-[actions_img]:https://github.com/Terrence/logging_demo/workflows/Django%20CI/badge.svg
+[actions_img]:https://github.com/Terrenceluo/logging_demo/workflows/Django%20CI/badge.svg
